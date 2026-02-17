@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useOrg } from "@/components/providers/org-provider";
+import { useSubscription } from "@/components/providers/subscription-provider";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,6 +28,7 @@ import type { Standard, StandardRules } from "@/lib/types";
 
 export default function StandardsPage() {
   const { standards, refresh } = useOrg();
+  const { checkLimit } = useSubscription();
   const [modalOpen, setModalOpen] = useState(false);
   const [editStandard, setEditStandard] = useState<Standard | null>(null);
   const [installing, setInstalling] = useState(false);
@@ -41,6 +43,10 @@ export default function StandardsPage() {
   const [maxLength, setMaxLength] = useState("");
 
   function openModal(std: Standard | null) {
+    if (!std && !checkLimit("add_standard", standards.length)) {
+      toast.error("Standard limit reached. Upgrade your plan for more.");
+      return;
+    }
     if (std) {
       setEditStandard(std);
       setName(std.name);
