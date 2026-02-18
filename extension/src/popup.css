@@ -115,6 +115,12 @@ input:focus {
   border-bottom: 1px solid #27272a;
 }
 
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .toolbar-left {
   display: flex;
   align-items: center;
